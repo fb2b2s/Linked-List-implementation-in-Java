@@ -47,41 +47,41 @@ public class SinglyLinkedList<T> implements Iterable<T> {
     public Iterator<T> iterator() { return new SLLIterator(); }
 
     protected class SLLIterator implements Iterator<T> {
-	Entry<T> cursor, prev;
-	boolean ready;  // is item ready to be removed?
+		Entry<T> cursor, prev;
+		boolean ready;  // is item ready to be removed?
 
-	SLLIterator() {
-	    cursor = head;
-	    prev = null;
-	    ready = false;
-	}
+		SLLIterator() {
+			cursor = head;
+			prev = null;
+			ready = false;
+		}
 
-	public boolean hasNext() {
-	    return cursor.next != null;
-	}
-	
-	public T next() {
-	    prev = cursor;
-	    cursor = cursor.next;
-	    ready = true;
-	    return cursor.element;
-	}
+		public boolean hasNext() {
+			return cursor.next != null;
+		}
 
-	// Removes the current element (retrieved by the most recent next())
-	// Remove can be called only if next has been called and the element has not been removed
-	public void remove() {
-	    if(!ready) {
-		throw new NoSuchElementException();
-	    }
-	    prev.next = cursor.next;
-	    // Handle case when tail of a list is deleted
-	    if(cursor == tail) {
-		tail = prev;
-	    }
-	    cursor = prev;
-	    ready = false;  // Calling remove again without calling next will result in exception thrown
-	    size--;
-	}
+		public T next() {
+			prev = cursor;
+			cursor = cursor.next;
+			ready = true;
+			return cursor.element;
+		}
+
+		// Removes the current element (retrieved by the most recent next())
+		// Remove can be called only if next has been called and the element has not been removed
+		public void remove() {
+			if(!ready) {
+				throw new NoSuchElementException();
+			}
+			prev.next = cursor.next;
+			// Handle case when tail of a list is deleted
+			if(cursor == tail) {
+				tail = prev;
+			}
+			cursor = prev;
+			ready = false;  // Calling remove again without calling next will result in exception thrown
+			size--;
+		}
     }  // end of class SLLIterator
 
     // Add new elements to the end of the list
@@ -90,30 +90,91 @@ public class SinglyLinkedList<T> implements Iterable<T> {
     }
 
     public void add(Entry<T> ent) {
-	tail.next = ent;
-	tail = tail.next;
-	size++;
+		tail.next = ent;
+		tail = tail.next;
+		size++;
     }
 
     public void printList() {
-	System.out.print(this.size + ": ");
-	for(T item: this) {
-	    System.out.print(item + " ");
-	}
+		System.out.print(this.size + ": ");
+		for(T item: this) {
+			System.out.print(item + " ");
+		}
 
-	System.out.println();
+		System.out.println();
     }
 
     // Rearrange the elements of the list by linking the elements at even index
     // followed by the elements at odd index. Implement by rearranging pointers
     // of existing elements without allocating any new elements.
     public void unzip() {
-	if(size < 3) {  // Too few elements.  No change.
-	    return;
-	}
-	// write the invariant
-	
+		if(size < 3) {  // Too few elements.  No change.
+			return;
+		}
+		// write the invariant
+		e_head = head;
+		o_head = head.next;
+
+		Entry<T> e, o, cursor;
+		e_tail = e_head;
+		o_tail = o_head;
+		e_tail.next = o_tail.next = null;
+		cursor = o_head.next;
+		int size = 2;
+
+		while(cursor != null){
+			if(size%2 == 0) {
+				e_tail.next = cursor;
+				e_tail = e_tail.next;
+				e_tail.next = null;
+			}
+			else {
+				o_tail.next = cursor;
+				o_tail = o_tail.next;
+				o_tail.next = null;
+			}
+			size++;
+			cursor = cursor.next;
+		}
+		e_tail.next = o_head;
     }
+
+	public void addFirst(T x){
+		Entry<T> ent = new Entry<>(x, null);
+		ent.next = head;
+		head = ent;
+	}
+
+	public void removeFirst(){
+		if(head == tail){
+			head = tail = null;
+			return;
+		}
+
+		head = head.next;
+	}
+
+	public T removeFirst(T x) throws NoSuchElementException{
+		T val;
+		if(head == tail && x == head.element){
+			val = head.element;
+			head = tail = null;
+			return val;
+		}
+
+		Entry<T> cursor = head;
+		while(cursor.next != null){
+			if(cursor.next.element == x){
+				if(cursor.next == tail)
+					tail = cursor;
+				val = cursor.next.element;
+				cursor.next = cursor.next.next;
+				return val;
+			}
+			cursor = cursor.next;
+		}
+		return val;
+	}
 
     public static void main(String[] args) throws NoSuchElementException {
         int n = 10;
@@ -127,34 +188,34 @@ public class SinglyLinkedList<T> implements Iterable<T> {
         }
         lst.printList();
 
-	Iterator<Integer> it = lst.iterator();
-	Scanner in = new Scanner(System.in);
-	whileloop:
-	while(in.hasNext()) {
-	    int com = in.nextInt();
-	    switch(com) {
-	    case 1:  // Move to next element and print it
-		if (it.hasNext()) {
-		    System.out.println(it.next());
-		} else {
-		    break whileloop;
+		Iterator<Integer> it = lst.iterator();
+		Scanner in = new Scanner(System.in);
+		whileloop:
+		while(in.hasNext()) {
+			int com = in.nextInt();
+			switch(com) {
+				case 1:  // Move to next element and print it
+					if (it.hasNext()) {
+						System.out.println(it.next());
+					} else {
+						break whileloop;
+					}
+					break;
+				case 2:  // Remove element
+					it.remove();
+					lst.printList();
+					break;
+				default:  // Exit loop
+					break whileloop;
+			}
 		}
-		break;
-	    case 2:  // Remove element
-		it.remove();
 		lst.printList();
-		break;
-	    default:  // Exit loop
-		break whileloop;
-	    }
-	}
-	lst.printList();
-	lst.unzip();
-    lst.printList();
-	removeFirst();
-	remove(9);
-	addFirst(2);
-    lst.printList();
+		lst.unzip();
+		lst.printList();
+//		removeFirst();
+//		remove(9);
+//		addFirst(2);
+//		lst.printList();
 
     }
 }
