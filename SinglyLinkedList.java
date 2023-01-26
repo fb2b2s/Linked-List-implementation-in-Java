@@ -112,12 +112,12 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 			return;
 		}
 		// write the invariant
-		e_head = head;
-		o_head = head.next;
+		Entry<T> e_head = head;
+		Entry<T> o_head = head.next;
 
 		Entry<T> e, o, cursor;
-		e_tail = e_head;
-		o_tail = o_head;
+		Entry<T> e_tail = e_head;
+		Entry<T> o_tail = o_head;
 		e_tail.next = o_tail.next = null;
 		cursor = o_head.next;
 		int size = 2;
@@ -154,7 +154,7 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 		head = head.next;
 	}
 
-	public T removeFirst(T x) throws NoSuchElementException{
+	public T remove(T x) throws NoSuchElementException{
 		T val;
 		if(head == tail && x == head.element){
 			val = head.element;
@@ -173,7 +173,8 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 			}
 			cursor = cursor.next;
 		}
-		return val;
+		System.out.println("No such element is present.");
+		return null;
 	}
 
     public static void main(String[] args) throws NoSuchElementException {
@@ -212,10 +213,10 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 		lst.printList();
 		lst.unzip();
 		lst.printList();
-//		removeFirst();
-//		remove(9);
-//		addFirst(2);
-//		lst.printList();
+		lst.removeFirst();
+		lst.remove(9);
+		lst.addFirst(2);
+		lst.printList();
 
     }
 }
