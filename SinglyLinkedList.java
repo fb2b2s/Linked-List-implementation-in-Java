@@ -142,15 +142,15 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 	}
  
 	 public void addFirst(T x){
-		 Entry<T> ent = new Entry<>(x, null);
-		 ent.next = head.next;
-		 head.next = ent;
-		 size++;
+		Entry<T> ent = new Entry<>(x, null);
+		ent.next = head.next;
+		head.next = ent;
+		size++;
 	 }
  
 	 public void removeFirst(){
 		Iterator<T> it = iterator();
-		it.hasNext();
+		it.next();
 		it.remove();
 	 }
  
@@ -169,7 +169,7 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 	 }
  
 	 public static void main(String[] args) throws NoSuchElementException {
-		 int n = 10;
+		 int n = 15;
 		 if(args.length > 0) {
 			 n = Integer.parseInt(args[0]);
 		 }
@@ -186,36 +186,43 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 		 while(in.hasNext()) {
 			 int com = in.nextInt();
 			 switch(com) {
-				 case 1:  // Move to next element and print it
-					 if (it.hasNext()) {
-						 System.out.println(it.next());
-					 } else {
-						 break whileloop;
-					 }
-					 break;
-				 case 2:  // Remove element
-					 it.remove();
-					 lst.printList();
-					 break;
+				case 1:  // Move to next element and print it
+					if (it.hasNext()) {
+						System.out.println(it.next());
+					} else {
+						break whileloop;
+					}
+					break;
+				case 2:  // Remove element
+					it.remove();
+					lst.printList();
+					break;
+				case 3:  // Remove first element element
+					lst.removeFirst();
+					System.out.println("The list after removing first element: ");
+					lst.printList();
+					break;
+				case 4:  // Remove element
+					lst.addFirst(2);
+					System.out.println("The list after adding 2 at the first position: ");
+					lst.printList();
+					break;
+				case 5:
+					lst.unzip();
+					System.out.println("The list after unzip: ");
+					lst.printList();
+					break;
+				case 6:
+					lst.remove(10);
+					System.out.println("The list after removing 10: ");
+					lst.printList();
+					break;
 				 default:  // Exit loop
 					 break whileloop;
 			 }
 		 }
 		 System.out.println("The list: ");
 		 lst.printList();
-		 lst.unzip();
-		 System.out.println("The list after unzip: ");
-		 lst.printList();
-		 lst.removeFirst();
-		 System.out.println("The list after removing first element: ");
-		 lst.printList();
-		 lst.remove(9);
-		 System.out.println("The list The list after removing 9: ");
-		 lst.printList();
-		 lst.addFirst(2);
-		 System.out.println("The list after adding 2 at the first: ");
-		 lst.printList();
- 
 	 }
  }
  
