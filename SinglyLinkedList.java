@@ -167,25 +167,45 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 		}while(it.hasNext());
 		throw new NoSuchElementException();
 	 }
+
+	 public T get(int index){
+		Iterator<T> it = iterator();
+
+		if(!it.hasNext())
+			throw new NoSuchElementException();
+		
+		int idx = 0;
+		do{
+			T val = it.next();
+			if(idx == index)
+				return val;
+			idx++;
+		}while(it.hasNext());
+
+		throw new NoSuchElementException(); // index may be out of range
+	 }
  
 	 public static void main(String[] args) throws NoSuchElementException {
-		 int n = 15;
-		 if(args.length > 0) {
-			 n = Integer.parseInt(args[0]);
-		 }
- 
-		 SinglyLinkedList<Integer> lst = new SinglyLinkedList<>();
-		 for(int i=1; i<=n; i++) {
-			 lst.add(Integer.valueOf(i));
-		 }
-		 lst.printList();
- 
-		 Iterator<Integer> it = lst.iterator();
-		 Scanner in = new Scanner(System.in);
-		 whileloop:
-		 while(in.hasNext()) {
-			 int com = in.nextInt();
-			 switch(com) {
+		int n = 15;
+		if(args.length > 0) {
+			n = Integer.parseInt(args[0]);
+		}
+
+		SinglyLinkedList<Integer> lst = new SinglyLinkedList<>();
+		for(int i=1; i<=n; i++) {
+			lst.add(Integer.valueOf(i));
+		}
+		lst.printList();
+
+		Iterator<Integer> it = lst.iterator();
+		Scanner in = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
+
+		whileloop:
+		while(in.hasNext()) {
+			int com = in.nextInt();
+			System.out.println("Enter command: ");
+			switch(com) {
 				case 1:  // Move to next element and print it
 					if (it.hasNext()) {
 						System.out.println(it.next());
@@ -213,16 +233,24 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 					lst.printList();
 					break;
 				case 6:
-					lst.remove(10);
+					int val = sc.nextInt();
+					lst.remove(val);
 					System.out.println("The list after removing 10: ");
 					lst.printList();
 					break;
+				case 7:
+					System.out.println("Enter the index: ");
+					int index = sc.nextInt();
+					int v = lst.get(index);
+					System.out.println("The number at index "
+						+ index + " is " + v);
+					break;
 				 default:  // Exit loop
 					 break whileloop;
-			 }
-		 }
-		 System.out.println("The list: ");
-		 lst.printList();
+			}
+		}
+		System.out.println("The list: ");
+		lst.printList();
 	 }
  }
  
