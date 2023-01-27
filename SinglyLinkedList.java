@@ -46,7 +46,7 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
  
 	 public Iterator<T> iterator() { return new SLLIterator(); }
  
-	 protected class SLLIterator implements Iterator<T> {
+	protected class SLLIterator implements Iterator<T> {
 		 Entry<T> cursor, prev;
 		 boolean ready;  // is item ready to be removed?
  
@@ -81,7 +81,7 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 			 cursor = prev;
 			 ready = false;  // Calling remove again without calling next will result in exception thrown
 			 size--;
-		 }
+		 }		 
 	 }  // end of class SLLIterator
  
 	 // Add new elements to the end of the list
@@ -184,6 +184,24 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 
 		throw new NoSuchElementException(); // index may be out of range
 	 }
+
+	 public void set(int index, T x){
+		Entry<T> cursor = head.next;
+		if(cursor == null)
+			throw new NoSuchElementException();
+
+		int idx = 0;
+		while(cursor !=null){
+			if(idx == index){
+				cursor.element = x;
+				return;
+			}
+			idx++;
+			cursor = cursor.next;
+		}
+
+		throw new NoSuchElementException(); // if index is out of bounds
+	 }
  
 	 public static void main(String[] args) throws NoSuchElementException {
 		int n = 15;
@@ -203,8 +221,8 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 
 		whileloop:
 		while(in.hasNext()) {
-			int com = in.nextInt();
 			System.out.println("Enter command: ");
+			int com = in.nextInt();
 			switch(com) {
 				case 1:  // Move to next element and print it
 					if (it.hasNext()) {
@@ -244,6 +262,11 @@ public class DoublyLinkedList<T> extends SinglyLinkedList<T> {
 					int v = lst.get(index);
 					System.out.println("The number at index "
 						+ index + " is " + v);
+					break;
+				case 8:
+					lst.set(14, 99);
+					System.out.println("The list after setting 99 at 0th index: ");
+					lst.printList();
 					break;
 				 default:  // Exit loop
 					 break whileloop;
